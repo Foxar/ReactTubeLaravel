@@ -1,0 +1,639 @@
+input.MuiInputBase-input {
+  color: #99B2DD;
+
+}
+
+div.profileHeader a.MuiButton-containedSecondary {
+  color:black;
+}
+
+
+div.App {
+  background-color: #30354B;
+
+  min-height: 1280px;
+  color: #99B2DD;
+}
+
+::placeholder{
+  color: #99B2DD;
+
+}
+
+
+div.header {
+  background-color:#3A405A;
+  display:table;
+  width: 100%;
+  min-height: 75px;
+  position: fixed;
+  top:0;
+  z-index: 1;
+  padding: 0 1em;
+}
+
+div.headerRow {
+  
+  display:table-row;
+}
+
+div.headerCell{
+  display:table-cell;
+  padding-top: 7px;
+  vertical-align: top;
+  width: 25%;
+}
+
+div.headerCell.headerSearch
+{
+  width: 35%;
+}
+
+div.headerUpload{
+  width:10%;
+}
+
+div.headerUpload > a{
+  height: 56px;
+}
+
+div.headerCell div.searchInput {
+  width: 80%;
+}
+
+div.searchInput > div.MuiInputBase-root > fieldset {
+  border-width: 0;
+}
+
+div.MuiOutlinedInput-root.Mui-focused.MuiOutlinedInput-notchedOutline  {
+  border-width: 0;
+}
+
+div.headerCell > .MuiInputBase-root{
+  width:100%;
+}
+
+div.headerProfile {
+  padding-right:1em;
+  margin: 0 !important;
+  text-align: center;
+}
+div.headerProfile > a{
+  height: 56px;
+}
+
+div.headerProfile > button > span > div.MuiAvatar-root {
+  
+  margin-right: 25px;
+}
+
+div.avatarDiv {
+  display: inline-block;
+  width: 40px;
+  margin-right:4em;
+  padding: 10px;
+}
+
+div.searchInput div.MuiInputBase-root {
+  background-color: #30354B;
+} 
+
+div.accountMenu > div.MuiPaper-root {
+  width: 15%;
+}
+
+
+
+
+
+div.component_videoplayer {
+  text-align:left;
+  background-color: black;
+  display: inline-block;
+}
+
+div.videoPage{
+  margin-left: 5em;
+  min-height: 1280px;
+  display: flex;
+  flex-direction: row;
+}
+
+div.videoPage h1 {
+  margin-top: 5px;
+}
+div.videoSection {
+  margin-top: 6em;
+  display:inline-block;
+  overflow: hidden;
+  background-color:#3A405A;
+
+}
+
+div.component_videoplayer div#playbackbuttons {
+  background-color: #484F70;
+}
+
+div.component_videoplayer div#playbackbuttons .fullscreenbutton{
+  float: right;
+}
+
+
+div.videoProgressBar{
+  background-color: whitesmoke;
+}
+
+div.videoProgressBar .MuiLinearProgress-bar1Buffer {
+  transition-timing-function: cubic-bezier(0, 0.96, 0, 1.05);
+}
+
+div.videoProgressBar .MuiLinearProgress-bar2Buffer {
+  transition-timing-function: cubic-bezier(0, 0.96, 0, 1.05);
+}
+
+
+div.videoInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+div.videoInfo hr {
+  border-color:gray;
+  border-width: 1px;
+  width: 100%;
+}
+
+div.videoInfo div.uploaderInfo >a{
+  display: flex;
+  justify-content: flex-start;;
+  vertical-align: middle;
+  width: 25%;
+  margin: 1em;
+}
+
+
+div.videoInfo div.uploaderInfo > a>* {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+div.videoInfo div.uploaderInfo > a >.MuiAvatar-root {
+  width: 60px;
+  height: 60px;
+}
+
+div.videoInfo div.uploaderInfo > a, a:hover, a:visited, a:active {
+  text-decoration: none;
+  color:inherit;
+}
+
+div.videoInfo h4{
+  margin-left: 2em;
+}
+
+div.videoInfo div.videoInfoDescription p{
+  padding-left: 6em;
+  padding-right: 24em;
+}
+
+div.relatedVideos {
+  display: inline-block;
+  width: 20%;
+  right: 0;
+  margin-top: 6em;
+  margin-left: 1em;
+}
+div.relatedVideo {
+  display: flex;
+  flex-direction: row;;
+  align-items: flex-start;
+  margin: 6px 0;
+  background-color: #3A405A;
+}
+
+div.relatedVideo h4{
+  margin:0;
+}
+
+img.relatedThumb {
+  width: 168px;
+  height: 94px;
+}
+
+div.relatedVideoInfo {
+  padding-left: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+div.relatedVideoInfo p {
+  margin: 0;
+  padding: 0;
+}
+
+
+div.commentSection {
+  min-height: 15vh;
+
+  margin-bottom: 15em;
+}
+div.commentSection .loading{
+  margin: 0 auto;
+  padding: 5em 50%;
+  display: flex;
+  align-items:flex-end;
+}
+
+div.comment.MuiPaper-root {
+  background-color: transparent;
+  padding: 1em;
+  color: #99B2DD;
+  display: flex;
+  
+}
+div.comment >  div.content > * {
+  display: flex;
+  
+  margin: 0.25em;
+  padding: 0;
+}
+
+div.commentAvatar { 
+  margin: 1em;
+}
+
+div.commentInfo {
+  display:flex;
+  text-align: center;
+  justify-content: center;
+}
+
+div.commentInfo * {
+  margin: 0 1em 0 0;
+}
+
+
+div.newComment {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+div.newComment h3{
+  text-align: center;
+}
+
+div.newComment form {
+  margin: 0 2em;
+  flex-grow: 4;
+  
+}
+div.newComment form div { 
+  width: 100%;
+}
+
+div.newComment button {
+  float:right;
+}
+
+div.commentInput textarea {
+  width: 100%;
+
+}
+
+
+
+div.videoStubs {
+  display: flex;
+  
+}
+
+div.videoStub {
+  display: flex;
+  flex-direction: column;;
+  align-items: flex-start;
+  margin: 6px 0;
+  background-color: #3A405A;
+}
+
+div.videoStub h4{
+  margin:0;
+}
+
+img.stubThumb {
+  width: 168px;
+  height: 94px;
+}
+
+div.videoStubInfo {
+  padding-left: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+div.videoStubInfo p {
+  margin: 0;
+  padding: 0;
+}
+
+div.verticalTabs > div {
+  background-color: inherit;
+}
+
+div.verticalTabs span.MuiTabs-indicator{
+  display: none;
+}
+
+
+
+
+div.loadingCircle {
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  padding: 25% 50%;
+  position: fixed;
+  margin: auto auto;
+}
+
+
+
+
+
+div.fileNotFound > h1 {
+  font-size: 10em;
+  margin: 0;
+}
+
+div.fileNotFound{
+  min-height: 1280px;
+  
+  margin: 0 12em;
+  padding: 12em 12em;
+  background-color: #3A405A;
+
+}
+
+
+
+
+div.loginPage {
+  padding-top: 12em;
+  padding-right: 30%;
+  padding-left: 30%;
+}
+
+div.loginForm {
+  background-color: #3A405A;
+  padding: 10%;
+}
+
+div.loginInput  {
+  text-align: center;
+  display:flex;
+  flex-direction: column;
+  margin: 2em 0;
+}
+
+span.loginInput{
+  text-align: center;
+  margin: 2em 0;
+}
+
+.loginInput> span >span{
+  margin-right: 1em;
+}
+
+
+div.headerUpload {
+  text-align: center;
+}
+
+
+div.videoUploadDesc {
+  display: block;
+  width: 100%;
+}
+
+div.uploadPage {
+  padding-top: 8em;
+  padding-right: 30%;
+  padding-left: 30%;
+}
+
+  div.uploadForm {
+    margin-top: 5em;
+  }
+div.uploadForm, form.uploadForm {
+  background-color: #3A405A;
+  padding: 3%;
+  display:flex;
+  flex-direction: column;
+}
+
+
+div.waitPrompt {
+  display: flex;
+}
+
+div.waitPrompt > div {
+  margin: auto 2em;
+}
+
+
+#contained-button-file, #contained-button-submit {
+  display: none;
+}
+#contained-button-file, #contained-button-search {
+  display: none;
+}
+
+.uploadInput, span.uploadInput{
+  text-align: center;
+  margin: 2em 0;
+}
+
+
+
+
+div.homePage{
+  padding-top: 6em;
+  display: flex;
+  flex-direction: row;
+}
+
+div.homePage div.relatedVideo{
+  margin: 1em;
+  padding: 1em;
+
+}
+
+
+
+
+
+
+
+li a {
+  background-color: #475664;
+  font-size: large;
+}
+
+
+
+
+
+
+div.profilePage{
+  margin-left: 6em; 
+  min-height: 1280px;
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+}
+
+.profileTab > span {
+  font-weight: bold;
+}
+
+
+div.profileSection{
+  background-color:#3A405A;
+  margin-top: 6em;
+  width: 100%;
+  padding: 5em 8em;
+}
+
+div.profileSection > div.MuiPaper-root {
+  background-color:#3A405A;
+}
+
+div.profileHeader{
+  display: flex;
+  justify-content: space-between;
+}
+
+div.profileInfo {
+  display: flex;
+  flex-direction: row;
+}
+
+div.profileInfoUsername > h1 {
+  margin: 0;
+}
+
+div.profileInfo > div.MuiAvatar-root {
+  margin-right: 1em;
+  height: 4em;
+  width: 4em;
+}
+
+div.profileInfoUsername {
+  display: flex;
+  flex-direction: column;
+}
+
+div.profileDetails {
+  display:flex;
+}
+
+div.profileDetails > div.profileDescription {
+  padding-right: 2em;
+  width: 75%;
+}
+
+ div.channelviews, div.videosviews {
+  display: none;
+}
+
+div.profileDetails > div.stats {
+  min-height: 10em;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 2em;
+}
+div.profileDetails > div.stats > div> h4,
+div.profileDetails > div.stats > div> p {
+  margin: 0;
+}
+
+
+.profileEditingContainer {
+  padding: 2px 0;
+}
+
+.profileEditingContainer > a {
+  height: 56px;
+}
+
+div.profileEditPage{
+  background-color:#3A405A;
+
+  margin-left: 6em; 
+  min-height: 1280px;
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+}
+
+div.profileEditTabs  div.MuiTabs-flexContainer{
+  display:flex;
+  flex-direction: column;
+}
+
+
+div.profileEditSection{
+  background-color:#3A405A;
+  margin-top: 6em;
+  width: 100%;
+  padding: 5em 5em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+div.profileEditSection > * {
+  margin-right: 5em;
+}
+
+div.profileEditSection div.profileEditTabs {
+  display: flex;
+  flex-direction: column;
+}
+
+div.profileEditSection div.tabContent{
+  flex-grow: 1;
+}
+
+div.profileEditSection form.profileEditForm{
+  flex-grow: 1;
+  display:flex;
+  flex-direction: column;
+  
+}
+
+div.profileEditSection > div.MuiPaper-root {
+  background-color:#3A405A;
+}
+
+
+.profileEditSection input.MuiInputBase-input, textarea.MuiInputBase-input {
+  color: #99B2DD;
+}
+
+
+div.profileRecentVideos{
+  display:flex;
+  flex-wrap: wrap;
+}
+
+div.profileRecentVideos > h3 {
+  width:100%;
+}
+
+div.profileRecentVideos > div {
+  margin-right: 1em;
+}
+
+
