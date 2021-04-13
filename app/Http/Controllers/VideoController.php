@@ -13,36 +13,23 @@ use FFMpeg;
 
 class VideoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-
-
-
+    //Return a list of five videos taken from the database.
     public function index()
     {
-        //
         $videos = Video::all()->take(5);
         return $videos;
     }
 
+    //Return array of videos where name matches the search parameter of the request.
     public function find(Request $request)
     {
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Hello from ");
-        //$out->writeln($request->search);
-
         $videos = Video::where('name', 'LIKE', '%'.$request->search.'%')->take(5)->get();
         return $videos->toArray();
     }
 
+    //Find video by id then edit it's title or description, whichever is provided.
     public function edit(Request $request)
     {
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Editing video " . $request->videoid);
         $vid = Video::all()->find($request->videoid);
         if($request->filled('name')) {
             $vid->name = $request->name;
@@ -54,15 +41,9 @@ class VideoController extends Controller
         return $vid;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //Create a new video in the database, with data given by the request.
     public function store(Request $request)
     {
-        //
         $video = new Video;
         $video->name = $request->name;
         $video->description = $request->desc;
@@ -75,31 +56,21 @@ class VideoController extends Controller
         return $video;
     }
 
+    //Store and process the video file given in the request.
     public function storeFile(Request $request)
     {
 
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Storing file");
+        //Store the uploaded video file in the public directory.
         $videofile = $request->file('file');
-
-        
-
-        $out->writeln('File Name: '.$videofile->getClientOriginalName());
-        $out->writeln('File format: '.$videofile->getClientOriginalExtension());
-
         $path = public_path().'\react-tube-app\public\videos\\';
+        //Rename the videofile to add _original suffix.
         $filename = $request->videoid.'_original.'.$videofile->getClientOriginalExtension();
-
-        $out->writeln('Storing at Path: '.$path);
-        $out->writeln('With filename: '.$filename);
         $videofile->move($path,$filename);
 
-        $out->writeln('Stored!');
-        
-        //$filesystem = new Filesystem();
+
+        //Processing the videofile using FFMpeg pipeline
         try {
-        
-            $out->writeln('Converting...');
+            //Convert the videofile to webm file format.
             FFMpeg::fromDisk('videos')
                 ->open($filename)
                 ->export()
@@ -110,8 +81,7 @@ class VideoController extends Controller
                 ->toDisk('videos')
                 ->inFormat(new \FFMpeg\Format\Video\WebM)
                 ->save($request->videoid . '.webm');        
-            $out->writeln('Converted!');
-            $out->writeln('Generating thumbnail...');
+            //Generate a thumbnail
             FFMpeg::fromDisk('videos')
                 ->open($filename)
                 ->getFrameFromSeconds(1)
@@ -120,94 +90,66 @@ class VideoController extends Controller
                 $out->writeln('Generated!');
         } catch (EncodingException $exception)
         {
+            //Catch any errors and output them to console.
             $command = $exception->getCommand();
             $errorLog = $exception->getErrorOutput();
             $out->writeln($command);
             $out->writeln($errorLog);
         }
-        $out->writeln('Done!');
         return response()->json(['message'=>'Video processing finished!', ],200);
-
-
-
     }
-
+    //Handle liking of a video
     public function like(Request $request)
     {
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Liking a video");
-        //$user = User::all()->find($request->userid);
+        //Get the current user
         $user = Auth::user();
-        $out->writeln("ID:");
-        $out->writeln(Auth::user()->id);
-        
         $vid = Video::all()->find($request->videoid);
-        $out->writeln("User: " . $user->id . " videoid: " . $vid->id);
-
+        //Attempt to like the video by current user
         if($vid->likedBy()->save($user))
         {
-            $out->writeln("Success!");
             return response()->json(['message'=>'Liked successfuly!', 'user'=>$user, 'video'=>$vid],200);
         }
-
-            $out->writeln("Error!");
         return response()->json(['message'=>'Failed to like!', 'user'=>$user, 'video'=>$vid],400);
 
     }
-
+    //Handle unliking of a video
     public function unlike(Request $request)
     {
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Liking a video");
-        //$user = User::all()->find($request->userid);
+        //Get the current user
         $user = Auth::user();
-        
         $vid = Video::all()->find($request->videoid);
-        $out->writeln("User: " . $user->id . " videoid: " . $vid->id);
-
+        //Attempt to unlike the video by the current user --UNFINISHED, PLACEHOLDER CODE
         if($vid->likedBy()->save($user))
         {
-            $out->writeln("Success!");
             return response()->json(['message'=>'Liked successfuly!', 'user'=>$user, 'video'=>$vid],200);
         }
-
-            $out->writeln("Error!");
         return response()->json(['message'=>'Failed to like!', 'user'=>$user, 'video'=>$vid],400);
 
     }
 
-
-
+    //Handle disliking of a video
     public function dislike(Request $request)
     {
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Disliking a video");
+        //Get the current user
         $user = Auth::user();
-        
         $vid = Video::all()->find($request->videoid);
-        $out->writeln("User: " . $user->id . " videoid: " . $vid->id);
-
+        //Attempt to dislike the video by current user
         if($vid->dislikedBy()->save($user))
         {
-            $out->writeln("Success!");
             return response()->json(['message'=>'Disliked successfuly!', 'user'=>$user, 'video'=>$vid],200);
         }
 
-            $out->writeln("Error!");
         return response()->json(['message'=>'Failed to dislike!', 'user'=>$user, 'video'=>$vid],400);
 
     }
 
-
+    //Handle undisliking of a video
     public function undislike(Request $request)
     {
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Disliking a video");
+        //Get the current user
         $user = Auth::user();
-        
         $vid = Video::all()->find($request->videoid);
-        $out->writeln("User: " . $user->id . " videoid: " . $vid->id);
-
+        //Attempt to undislike the video by the current user --UNFINISHED, PLACEHOLDER CODE
         if($vid->dislikedBy()->save($user))
         {
             $out->writeln("Success!");
@@ -219,58 +161,36 @@ class VideoController extends Controller
 
     }
 
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Video  $video
-     * @return \Illuminate\Http\Response
-     */
+    //Return given video attributes (User viewing)
     public function show(Request $request)
     { 
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Show");
-        $out->writeln($request);
-
-        
-
+        //Find video by id
         $vid = Video::all()->find($request->id);
 
+        //Increase video views
         $vid->views = $vid->views+1;
         $vid->save();
 
+
         $videofilePath=public_path().'\react-tube-app\public\videos\\'.$vid->id.'.webm';
-        if(file_exists($videofilePath))
-        {
-            $out->writeln("Videofile exists at " . $videofilePath);
-        }
-        else
+        if(!file_exists($videofilePath))
         {
             $out->writeln("Videofile DOES NOT exists at " . $videofilePath);
-            
-
             return response()->json('Videofile does not exist!',404);    
         }
 
-        $out->writeln($vid->name);
         $path = 'http://localhost:8000/react-tube-app/public/videos/'.$vid->id.'.webm';
         $pathThumb = 'http://localhost:8000/react-tube-app/public/videos/'.$vid->id.'.png';
 
-
-        $out->writeln("Comments");
-        $out->writeln($vid->comments->take(5));
+        //Retrieve 5 comments from the video.
         $comments = $vid->comments->take(5);
 
         for($i=0; $i<count($comments); $i++){
-            $out->writeln("Comment");
-
-            $out->writeln($comments[$i]);
-            $out->writeln("User");
+            //Acquire comment author's name
             $user = $comments[$i]->User;
-            $out->writeln($user->name);
             $comments[$i]->author = $comments[$i]->User->name;
 
+            //Acquire comment creation date, then format it appropriately
             if($comments[$i]->created_at != null){
                 $carbonCommentsObj = Carbon::parse($comments[$i]->created_at);
                 $commentDateTime = [
@@ -290,20 +210,12 @@ class VideoController extends Controller
             }
             else 
                 $comments[$i]->postDate = "";
-
-            
-
-            
         }
-            
-        $out->writeln($vid->likes);
-        $out->writeln($vid->dislikes);
-        $out->writeln(gettype($vid->likedby));
-        $out->writeln($vid->likedby);
+        //Retrieve likes and dilikes counts
         $likesCount = $vid->likedby->count();
         $dislikesCount = $vid->dislikedby->count();
-        $out->writeln($likesCount);
-        $out->writeln($dislikesCount);
+
+        //Retrieve video creation date, then format it appropriately
         $carbonObj = Carbon::parse($vid->video_uploaded);
         $uploadedDateTime = [
             "date" => [
@@ -370,26 +282,6 @@ class VideoController extends Controller
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Video  $video
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Video $video)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Video  $video
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Video $video)
-    {
-        //
-    }
+    //To-add: Deleting resource.
 }
