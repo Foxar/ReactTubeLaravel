@@ -11,6 +11,6 @@ The project is mostly feature-complete now, with only minor additions, code clea
 # TO-DO List:
 - Add authentication middleware to Laravel endpoints.
 - Add missing resource operations on comments, users and videos.
-
+- Front-end code cleanup
 
 Issues, pointers and suggestions are very welcome!
