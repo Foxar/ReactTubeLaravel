@@ -14,36 +14,11 @@ use Carbon\Carbon;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Handle an incoming registration request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
+    //Create a new user with given attributes.
     public function store(Request $request)
     {
+
+        //Check for data requirements.
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -53,6 +28,8 @@ class UserController extends Controller
         if($validator->fails()){
             return response()->json(['errors'=>$validator->errors(),'data'=>$request->all()], 500);
         }
+
+        //Create the user in database
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -61,20 +38,18 @@ class UserController extends Controller
             'created_at' => now(),
             'password' => Hash::make($request->password),
         ]);
-        //Auth::login();
         //Returns 422 on fail
         return $user;
-
-
-
     }
 
+    //Get videos uploaded by the user.
     public function getUserVideos(Request $request)
     {
         $user = User::find($request->userid);
         return $user->videos;
     }
 
+    //Get videos recently uploaded by the user.
     public function getUserRecentVideos(Request $request)
     {
         $user = User::find($request->userid);
@@ -82,55 +57,48 @@ class UserController extends Controller
         return $user->videos;
     }
 
+
+    //Handle logging in of a user
     public function authenticate(Request $request)
     {
+        //Retrieve email and password pair from the request.
         $credentials = $request->only('email', 'password');
 
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Attempting to auth");
+        //Attempt to auth with the email password credentials pair.
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            
-            $out->writeln("Success");
             return Auth::user();
         }
 
-        
-        $out->writeln("Failed");
-        
+        //Return error message if logging in fails.
         return response()->json([
             'error' => 'The provided credentials do not match our records.',
         ],401);
     }
+
+    //Handle logging out of a user.
     public function logout(Request $request)
     {
         Auth::logout();
         return response('Logged out', 200);
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
+    
+    //Retrieve current user's ID.
     public function show(User $user)
     {
-        
         return response()->json(["id"=>Auth::id()]);
     }
 
+    //Retrieve user profile's information.
     public function getprofile(Request $request)
     {
-        $user = User::find($request->id);
-        $videos = $user->videos;
 
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Show");
-        foreach($videos as $video){
-            $out->writeln($video->name);
-        }
-        $out->writeln("Show");
+        //Find user by id
+        $user = User::find($request->id);
+        //Find user's videos
+        $videos = $user->videos;
         
+        //Retrieve user's account creation date and the format it appropriately.
         $carbonObj = Carbon::parse($user->user_joined);
         $uploadedDateTime = [
             "date" => [
@@ -155,71 +123,28 @@ class UserController extends Controller
             ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
+    //Edit user's account
     public function edit(Request $request)
     {
+        //Find user by ID.
         $user = User::find(Auth::id());
-
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln($user);
-        $out->writeln($request);
-
-
-        $out->writeln("Checking for avatar file");
+        
+        //Check if user uploaded a new profile picture. If yes, store it.
         $avatarfile = $request->file('file');
         if($avatarfile != null){
-            $out->writeln("Storing file");
-            
-
-            $out->writeln('File Name: '.$avatarfile->getClientOriginalName());
-            $out->writeln('File format: '.$avatarfile->getClientOriginalExtension());
-
             $path = public_path().'\react-tube-app\public\avatars\\';
             $filename = Auth::id().'.png';
-
-            $out->writeln('Storing at Path: '.$path);
-            $out->writeln('With filename: '.$filename);
             $avatarfile->move($path,$filename);
-
-            $out->writeln('Stored!');
         }
 
-        
+        //Check if the name or profile description fields have been edited. If so, submit the changes to database.
         if($request->filled('name'))
             $user->name = $request->name;
         if($request->filled('desc'))
             $user->description = $request->desc;
         $user->save();
         return response($user, 200);
-
-
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
-    {
-        //
-    }
+    //TO-DO: Destroying of resource.
 }
