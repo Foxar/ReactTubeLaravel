@@ -14,3 +14,4 @@ The project is mostly feature-complete now, with only minor additions, code clea
 - Front-end code cleanup
 
 Issues, pointers and suggestions are very welcome!
+(In fact if someone has experience with React SPA - Laravel infrastructure, please contact me as I'm not sure if I'm doing things correctly here.)
