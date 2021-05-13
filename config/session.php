@@ -156,7 +156,6 @@ return [
     */
 
     'domain' => env('SESSION_DOMAIN', null),
-    //'domain' => '.asd',
 
     /*
     |--------------------------------------------------------------------------
@@ -169,8 +168,7 @@ return [
     |
     */
 
-    //'secure' => env('SESSION_SECURE_COOKIE'),
-    'secure' => env('SESSION_SECURE_COOKIE', false),
+    'secure' => env('SESSION_SECURE_COOKIE'),
 
     /*
     |--------------------------------------------------------------------------
@@ -183,7 +181,7 @@ return [
     |
     */
 
-    'http_only' => false,
+    'http_only' => true,
 
     /*
     |--------------------------------------------------------------------------
