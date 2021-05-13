@@ -29,10 +29,6 @@ return [
     */
 
     'disks' => [
-        'videos' => [
-            'driver' => 'local',
-            'root' => public_path().'\react-tube-app\public\videos\\',
-        ],
 
         'local' => [
             'driver' => 'local',

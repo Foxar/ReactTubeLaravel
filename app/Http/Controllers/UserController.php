@@ -61,8 +61,12 @@ class UserController extends Controller
     //Handle logging in of a user
     public function authenticate(Request $request)
     {
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        //$out->writeln('Request: ' . $request);
         //Retrieve email and password pair from the request.
         $credentials = $request->only('email', 'password');
+        $out->writeln('Credentials:');
+        $out->writeln($credentials);
 
         //Attempt to auth with the email password credentials pair.
         if (Auth::attempt($credentials)) {
@@ -86,6 +90,9 @@ class UserController extends Controller
     //Retrieve current user's ID.
     public function show(User $user)
     {
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $out->writeln('id');
+        $out->writeln(Auth::id());
         return response()->json(["id"=>Auth::id()]);
     }
 

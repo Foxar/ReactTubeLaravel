@@ -172,15 +172,15 @@ class VideoController extends Controller
         $vid->save();
 
 
-        $videofilePath=public_path().'\react-tube-app\public\videos\\'.$vid->id.'.webm';
+        $videofilePath=public_path().'\videos\\'.$vid->id.'.webm';
         if(!file_exists($videofilePath))
         {
             $out->writeln("Videofile DOES NOT exists at " . $videofilePath);
             return response()->json('Videofile does not exist!',404);    
         }
 
-        $path = 'http://localhost:8000/react-tube-app/public/videos/'.$vid->id.'.webm';
-        $pathThumb = 'http://localhost:8000/react-tube-app/public/videos/'.$vid->id.'.png';
+        $path = 'http://localhost:8000/videos/'.$vid->id.'.webm';
+        $pathThumb = 'http://localhost:8000/videos/'.$vid->id.'.png';
 
         //Retrieve 5 comments from the video.
         $comments = $vid->comments->take(5);

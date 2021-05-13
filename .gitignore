@@ -1,10 +1,6 @@
 /node_modules
 /public/hot
 /public/storage
-/public/react-tube-app/public/
-/public/react-tube-app/node_modules/
-/database/database.sqli
-/database/sqlite3.exe
 /storage/*.key
 /vendor
 .env
