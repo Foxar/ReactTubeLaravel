@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Carbon\Carbon;
 
@@ -157,7 +158,7 @@ class VideoController extends Controller
 
     //Return given video attributes (User viewing)
     public function show(Request $request)
-    { 
+    {
         //Find video by id
         $vid = Video::all()->find($request->id);
 
@@ -225,36 +226,28 @@ class VideoController extends Controller
             ];
             $liked = 0;
             $disliked = 0;
-
-            //RAN INTO ISSUES WITH GETTING AUTHENTICATED USER ON A NON-AUTH MIDDLEWARE ROUTE
-            /*
             
-            if(Auth::check())
-            $out->writeln("Authenticateddddddddd");
-        else
-            $out->writeln("Unauthenticateddddddd");
-        
-        $out->writeln("Auth");
-        $user = auth('web')->user();
+            
+            $user = auth('web')->user();
 
-
-        $out->writeln($user);
-
-        foreach($vid->likedby as $likedby)
-        {
-            $out->writeln("Likedby:");
-            $out->writeln($likedby->id);
-            $out->writeln($likedby);
-            if($likedby->id == $user->id)
+            //This is highly inefficient. In future, try and find a more efficient solution.
+            foreach($vid->likedby as $likedby)
             {
-                $out->writeln("Liked by current user");
-                $liked = 1;
-                break;
+                if($likedby->id == $user->id)
+                {
+                    $liked = 1;
+                    break;
+                }
             }
-        }
-        $liked = $vid->likedby->where('user_id', Auth::id());
-        $disliked = $vid->dislikedby->where('user_id', Auth::id());
-*/
+            foreach($vid->dislikedBy as $dislikedby)
+            {
+                if($dislikedby->id == $user->id)
+                {
+                    $disliked= 1;
+                    break;
+                }
+            }
+
         return response()->json([
             'thumbnailPath'=>$pathThumb,
             'path'=>$path,

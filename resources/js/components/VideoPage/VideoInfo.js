@@ -22,7 +22,7 @@ function VideoInfo(props) {
             <h1>{props.name}</h1>
             <p>{props.views} views</p>
             <VideoLikeBar videoid={props.videoid} likeratio={likeratio}
-                likes={props.likes} dislikes={props.dislikes}
+                likes={props.likes} dislikes={props.dislikes} liked={props.liked} disliked={props.disliked}
                 likeCallback={props.likeCallback} dislikeCallback={props.dislikeCallback} />
             <h5>{props.date.date.day + " " + props.date.date.month + " " + props.date.date.year}</h5>
             <hr />

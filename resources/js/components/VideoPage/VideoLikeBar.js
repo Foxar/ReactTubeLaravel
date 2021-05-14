@@ -8,7 +8,13 @@ import axios from "axios";
 
 function VideoLikeBar(props) {
 
+    console.log("VideoLikeBar");
+    console.log(props);
     let width = props.likeratio + '%';
+    let likedColor = (props.liked == 0) ? "secondary" : "default";
+    let dislikedColor = (props.disliked == 0) ? "secondary" : "default";
+    console.log(likedColor);
+    console.log(dislikedColor);
 
     return (
         <div className="videoLikeDislikeContainer" style={{
@@ -32,7 +38,7 @@ function VideoLikeBar(props) {
                         height: '100%',
                     }}  ></div>
                 </div >
-                <IconButton className="likebutton" color="secondary" onClick={() => {
+                <IconButton className="likebutton" color={likedColor} onClick={() => {
                     axiosCsrf.get('http://localhost:8000/api/sanctum/csrf-cookie', { withCredentials: true }).
                         then((data) => {
                             console.log(data);
@@ -46,7 +52,7 @@ function VideoLikeBar(props) {
                     <ThumbUpIcon />
                     {props.likes}
                 </IconButton>
-                <IconButton className="dislikebutton" color="secondary" onClick={() => {
+                <IconButton className="dislikebutton" color={dislikedColor} onClick={() => {
                     axiosCsrf.get('http://localhost:8000/api/sanctum/csrf-cookie', { withCredentials: true }).
                         then((data) => {
                             console.log(data);
