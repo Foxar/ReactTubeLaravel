@@ -22,6 +22,7 @@ class CreateVideosTable extends Migration
             $table->integer('views');
             $table->integer('user_id')->unsigned();
             $table->timestamp('video_uploaded');
+            $table->boolean('fileprocessed');
             $table->timestamps();
         });
 

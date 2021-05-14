@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Video;
+use App\Jobs\ProcessVideo;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Carbon\Carbon;
 
@@ -50,6 +53,7 @@ class VideoController extends Controller
         $video->likes=0;
         $video->dislikes=0;
         $video->views=0;
+        $video->fileprocessed = false;
         $video->video_uploaded = now();
         $video->User()->associate(Auth::user());
         $video->save();
@@ -59,7 +63,6 @@ class VideoController extends Controller
     //Store and process the video file given in the request.
     public function storeFile(Request $request)
     {
-
         //Store the uploaded video file in the public directory.
         $videofile = $request->file('file');
         $path = public_path().'\\videos\\';
@@ -67,30 +70,9 @@ class VideoController extends Controller
         $filename = $request->videoid.'_original.'.$videofile->getClientOriginalExtension();
         $videofile->move($path,$filename);
 
+        ProcessVideo::dispatch(Video::all()->find($request->videoid),$videofile->getClientOriginalExtension());
 
-        //Processing the videofile using FFMpeg pipeline
-        try {
-            //Convert the videofile to webm file format.
-            FFMpeg::fromDisk('videos')
-                ->open($filename)
-                ->export()
-                ->toDisk('videos')
-                ->inFormat(new \FFMpeg\Format\Video\WebM)
-                ->save($request->videoid . '.webm');        
-
-            //Generate a thumbnail
-            FFMpeg::fromDisk('videos')
-                ->open($filename)
-                ->getFrameFromSeconds(1)
-                ->export()
-                ->save($request->videoid.'.png');
-        } catch (EncodingException $exception)
-        {
-            //Catch any errors and output them to console.
-            $command = $exception->getCommand();
-            $errorLog = $exception->getErrorOutput();
-        }
-        return response()->json(['message'=>'Video processing finished!', ],200);
+        return response()->json(['message'=>'Video processed!', ],200);
     }
     //Handle liking of a video
     public function like(Request $request)
@@ -157,16 +139,20 @@ class VideoController extends Controller
 
     //Return given video attributes (User viewing)
     public function show(Request $request)
-    { 
+    {
         //Find video by id
         $vid = Video::all()->find($request->id);
+
+        if(!$vid->fileprocessed)
+        {
+            return response()->json('Video is still processing!',404);
+        }
 
         //Increase video views
         $vid->views = $vid->views+1;
         $vid->save();
-
-
         $videofilePath=public_path().'\videos\\'.$vid->id.'.webm';
+
         if(!file_exists($videofilePath))
         {
             return response()->json('Videofile does not exist!',404);    
@@ -225,36 +211,28 @@ class VideoController extends Controller
             ];
             $liked = 0;
             $disliked = 0;
-
-            //RAN INTO ISSUES WITH GETTING AUTHENTICATED USER ON A NON-AUTH MIDDLEWARE ROUTE
-            /*
             
-            if(Auth::check())
-            $out->writeln("Authenticateddddddddd");
-        else
-            $out->writeln("Unauthenticateddddddd");
-        
-        $out->writeln("Auth");
-        $user = auth('web')->user();
+            
+            $user = auth('web')->user();
 
-
-        $out->writeln($user);
-
-        foreach($vid->likedby as $likedby)
-        {
-            $out->writeln("Likedby:");
-            $out->writeln($likedby->id);
-            $out->writeln($likedby);
-            if($likedby->id == $user->id)
+            //This is highly inefficient. In future, try and find a more efficient solution.
+            foreach($vid->likedby as $likedby)
             {
-                $out->writeln("Liked by current user");
-                $liked = 1;
-                break;
+                if($likedby->id == $user->id)
+                {
+                    $liked = 1;
+                    break;
+                }
             }
-        }
-        $liked = $vid->likedby->where('user_id', Auth::id());
-        $disliked = $vid->dislikedby->where('user_id', Auth::id());
-*/
+            foreach($vid->dislikedBy as $dislikedby)
+            {
+                if($dislikedby->id == $user->id)
+                {
+                    $disliked= 1;
+                    break;
+                }
+            }
+
         return response()->json([
             'thumbnailPath'=>$pathThumb,
             'path'=>$path,

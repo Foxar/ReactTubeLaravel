@@ -43,6 +43,8 @@ class VideoPage extends React.Component {
                     authorid: video.userid,
                     views: video.views.toLocaleString(),
                     tempRelatedThumb: video.thumbnailPath,
+                    liked: video.liked,
+                    disliked: video.disliked,
                     likes: video.likes,
                     dislikes: video.dislikes,
                     date: video.uploaded,
@@ -74,7 +76,7 @@ class VideoPage extends React.Component {
 
     dislikeCallback() {
         this.setState({
-            likes: this.state.likes - 1,
+            dislikes: this.state.dislikes + 1,
         })
     }
 
@@ -104,7 +106,7 @@ class VideoPage extends React.Component {
 
             console.log("Videopage");
             let { date, loaded, path, comments, name, desc, videoWidth, views, tempRelatedThumb, authorname, likes,
-                dislikes, authorid } = this.state;
+                dislikes, authorid, liked, disliked } = this.state;
             let likeratio = 50.0;
             if (loaded) {
                 console.log(likes + "/" + dislikes);
@@ -123,7 +125,7 @@ class VideoPage extends React.Component {
                             <VideoInfo videoid={this.props.match.params.urlName}
                                 width={videoWidth + "px"} name={name} desc={desc} views={views}
                                 author={authorname} likeratio={likeratio} authorid={authorid}
-                                date={date} likes={likes} dislikes={dislikes}
+                                date={date} likes={likes} dislikes={dislikes} liked={liked} disliked={disliked}
                                 likeCallback={this.likeCallback} dislikeCallback={this.dislikeCallback} />
                             <hr />
 
