@@ -13,7 +13,8 @@ class Video extends Model
         'description',
         'likes',
         'dislikes',
-        'views'
+        'views',
+        'fileprocessed'
     ];
 
     protected $casts = [
