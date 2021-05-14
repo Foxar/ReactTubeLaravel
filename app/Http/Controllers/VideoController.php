@@ -62,7 +62,7 @@ class VideoController extends Controller
 
         //Store the uploaded video file in the public directory.
         $videofile = $request->file('file');
-        $path = public_path().'\react-tube-app\public\videos\\';
+        $path = public_path().'\\videos\\';
         //Rename the videofile to add _original suffix.
         $filename = $request->videoid.'_original.'.$videofile->getClientOriginalExtension();
         $videofile->move($path,$filename);
@@ -75,8 +75,8 @@ class VideoController extends Controller
                 ->open($filename)
                 ->export()
                 ->onProgress(function ($percentage) {
-                    $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-                    $out->writeln($percentage . '% transcoded');
+                    //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
+                    //$out->writeln($percentage . '% transcoded');
                 })
                 ->toDisk('videos')
                 ->inFormat(new \FFMpeg\Format\Video\WebM)
@@ -87,14 +87,14 @@ class VideoController extends Controller
                 ->getFrameFromSeconds(1)
                 ->export()
                 ->save($request->videoid.'.png');
-                $out->writeln('Generated!');
+                //$out->writeln('Generated!');
         } catch (EncodingException $exception)
         {
             //Catch any errors and output them to console.
             $command = $exception->getCommand();
             $errorLog = $exception->getErrorOutput();
-            $out->writeln($command);
-            $out->writeln($errorLog);
+            //$out->writeln($command);
+            //$out->writeln($errorLog);
         }
         return response()->json(['message'=>'Video processing finished!', ],200);
     }
@@ -152,11 +152,11 @@ class VideoController extends Controller
         //Attempt to undislike the video by the current user --UNFINISHED, PLACEHOLDER CODE
         if($vid->dislikedBy()->save($user))
         {
-            $out->writeln("Success!");
+            //$out->writeln("Success!");
             return response()->json(['message'=>'Disliked successfuly!', 'user'=>$user, 'video'=>$vid],200);
         }
 
-            $out->writeln("Error!");
+            //$out->writeln("Error!");
         return response()->json(['message'=>'Failed to dislike!', 'user'=>$user, 'video'=>$vid],400);
 
     }
@@ -175,7 +175,7 @@ class VideoController extends Controller
         $videofilePath=public_path().'\videos\\'.$vid->id.'.webm';
         if(!file_exists($videofilePath))
         {
-            $out->writeln("Videofile DOES NOT exists at " . $videofilePath);
+            //$out->writeln("Videofile DOES NOT exists at " . $videofilePath);
             return response()->json('Videofile does not exist!',404);    
         }
 
