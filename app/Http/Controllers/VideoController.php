@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Video;
+use App\Jobs\ProcessVideo;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -51,6 +53,7 @@ class VideoController extends Controller
         $video->likes=0;
         $video->dislikes=0;
         $video->views=0;
+        $video->fileprocessed = false;
         $video->video_uploaded = now();
         $video->User()->associate(Auth::user());
         $video->save();
@@ -60,7 +63,6 @@ class VideoController extends Controller
     //Store and process the video file given in the request.
     public function storeFile(Request $request)
     {
-
         //Store the uploaded video file in the public directory.
         $videofile = $request->file('file');
         $path = public_path().'\\videos\\';
@@ -68,30 +70,9 @@ class VideoController extends Controller
         $filename = $request->videoid.'_original.'.$videofile->getClientOriginalExtension();
         $videofile->move($path,$filename);
 
+        ProcessVideo::dispatch(Video::all()->find($request->videoid),$videofile->getClientOriginalExtension());
 
-        //Processing the videofile using FFMpeg pipeline
-        try {
-            //Convert the videofile to webm file format.
-            FFMpeg::fromDisk('videos')
-                ->open($filename)
-                ->export()
-                ->toDisk('videos')
-                ->inFormat(new \FFMpeg\Format\Video\WebM)
-                ->save($request->videoid . '.webm');        
-
-            //Generate a thumbnail
-            FFMpeg::fromDisk('videos')
-                ->open($filename)
-                ->getFrameFromSeconds(1)
-                ->export()
-                ->save($request->videoid.'.png');
-        } catch (EncodingException $exception)
-        {
-            //Catch any errors and output them to console.
-            $command = $exception->getCommand();
-            $errorLog = $exception->getErrorOutput();
-        }
-        return response()->json(['message'=>'Video processing finished!', ],200);
+        return response()->json(['message'=>'Video processed!', ],200);
     }
     //Handle liking of a video
     public function like(Request $request)
@@ -162,12 +143,16 @@ class VideoController extends Controller
         //Find video by id
         $vid = Video::all()->find($request->id);
 
+        if(!$vid->fileprocessed)
+        {
+            return response()->json('Video is still processing!',404);
+        }
+
         //Increase video views
         $vid->views = $vid->views+1;
         $vid->save();
-
-
         $videofilePath=public_path().'\videos\\'.$vid->id.'.webm';
+
         if(!file_exists($videofilePath))
         {
             return response()->json('Videofile does not exist!',404);    
