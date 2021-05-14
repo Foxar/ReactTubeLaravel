@@ -11,3 +11,6 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+/database/database.sqli
+/databse/sqlite3.exe
+/public

@@ -44,7 +44,7 @@ class VideoPlayer extends React.Component {
                                 }));
                                 console.log(this.state.played);
                             }} />
-                        <LinearProgress color="primary" className="videoProgressBar" variant="buffer" value={this.state.played * 100} valueBuffer={this.state.loaded} />
+                        <LinearProgress className="videoProgressBar" variant="buffer" value={this.state.played * 100} valueBuffer={this.state.loaded * 100} />
                         <div id="playbackbuttons">
                             <IconButton className="playbutton" color="secondary" onClick={() => {
                                 this.setState((state) => ({
