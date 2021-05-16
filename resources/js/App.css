@@ -138,6 +138,13 @@ div.component_videoplayer div#playbackbuttons .fullscreenbutton{
   float: right;
 }
 
+div.component_videoplayer div#playbackbuttons .qualityButton{
+  float: right;
+}
+
+div#quality-menu .selectedQuality {
+  background-color: red;
+}
 
 div.videoProgressBar{
   background-color: whitesmoke;

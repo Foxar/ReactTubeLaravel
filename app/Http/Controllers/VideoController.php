@@ -158,7 +158,7 @@ class VideoController extends Controller
             return response()->json('Videofile does not exist!',404);    
         }
 
-        $path = 'http://localhost:8000/videos/'.$vid->id.'_hq.mkv';
+        $path = 'http://localhost:8000/videos/'.$vid->id.'.mkv';
         $pathThumb = 'http://localhost:8000/videos/'.$vid->id.'.png';
 
         //Retrieve 5 comments from the video.
