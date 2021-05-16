@@ -151,14 +151,14 @@ class VideoController extends Controller
         //Increase video views
         $vid->views = $vid->views+1;
         $vid->save();
-        $videofilePath=public_path().'\videos\\'.$vid->id.'.webm';
+        $videofilePath=public_path().'\videos\\'.$vid->id.'_hq.mkv';
 
         if(!file_exists($videofilePath))
         {
             return response()->json('Videofile does not exist!',404);    
         }
 
-        $path = 'http://localhost:8000/videos/'.$vid->id.'.webm';
+        $path = 'http://localhost:8000/videos/'.$vid->id.'_hq.mkv';
         $pathThumb = 'http://localhost:8000/videos/'.$vid->id.'.png';
 
         //Retrieve 5 comments from the video.
