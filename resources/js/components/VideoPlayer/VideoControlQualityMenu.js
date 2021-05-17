@@ -18,6 +18,7 @@ class QualityMenu extends React.Component {
 
         this.chooseQuality = props.chooseQuality;
         this.handleClick = this.handleClick.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.select = this.select.bind(this);
 
     }
@@ -68,6 +69,11 @@ class QualityMenu extends React.Component {
                 </IconButton>
 
                 <Menu
+                    onMouseLeave={() => {
+                        document.addEventListener(() => {
+                            this.handleClose();
+                        })
+                    }}
                     id="quality-menu"
                     anchorEl={this.state.anchorEl}
                     keepMounted
