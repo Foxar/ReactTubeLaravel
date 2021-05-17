@@ -104,7 +104,10 @@ div.accountMenu > div.MuiPaper-root {
 
 
 
-
+div.videoEditStub {
+  display: flex;
+  flex-direction: row;
+}
 
 div.component_videoplayer {
   text-align:left;

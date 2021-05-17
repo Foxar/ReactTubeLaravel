@@ -38,6 +38,9 @@ Route::post('/edituser', [UserController::class, 'edit'])
 Route::get('/currentuser', [UserController::class, 'show'])
 ->name('currentuser')->middleware('auth');
 
+Route::post('/deletevideo', [VideoController::class, 'delete'])
+->name('deletevideo')->middleware('auth');
+
 //add middleware auth later here
 Route::post('/uploadvideo', [VideoController::class, 'store'])
 ->name('uploadvideo');

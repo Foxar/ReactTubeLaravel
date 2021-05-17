@@ -137,6 +137,15 @@ class VideoController extends Controller
 
     }
 
+    public function delete(Request $request)
+    {
+        Log::info("Deleting video " . $request->id);
+        $vid = Video::all()->find($request->id);
+        $vid->delete();
+        Log::info("Deleted.");
+        return response()->json(['video'=>$vid, ],200);
+    }
+
     //Return given video attributes (User viewing)
     public function show(Request $request)
     {
