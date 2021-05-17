@@ -53,6 +53,7 @@ class ProfileEditForm extends React.Component {
                     .then((data) => {
                         console.log("Edit result");
                         console.log(data);
+                        window.location.reload(false);
                     });
 
             });

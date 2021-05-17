@@ -37,16 +37,39 @@ class ProcessVideo implements ShouldQueue
      */
     public function handle()
     {
+        //Multiple qualities x264 formats
+        $format_hq = new \FFMpeg\Format\Video\X264();
+        $format_mq = new \FFMpeg\Format\Video\X264();
+        $format_lq = new \FFMpeg\Format\Video\X264();
+
+        $format_mq->setKiloBitrate(500);
+        $format_lq->setKiloBitrate(150);
+
         $filename = $this->video->id.'_original.'.$this->extension;
+        
+        Log::info("Converting video ".$filename);
         //Process the video
         try {
             //Convert the videofile to webm file format.
             FFMpeg::fromDisk('videos')
                 ->open($filename)
+                //Convert to high quality
                 ->export()
                 ->toDisk('videos')
-                ->inFormat(new \FFMpeg\Format\Video\WebM)
-                ->save($this->video->id . '.webm');        
+                ->inFormat($format_hq)
+                ->save($this->video->id . '_hq.mkv')
+
+                //Convert to medium quality
+                ->export()
+                ->toDisk('videos')
+                ->inFormat($format_mq)
+                ->save($this->video->id . '_mq.mkv')
+
+                //Convert to low quality
+                ->export()
+                ->toDisk('videos')
+                ->inFormat($format_lq)
+                ->save($this->video->id . '_lq.mkv');        
 
             //Generate a thumbnail
             FFMpeg::fromDisk('videos')
@@ -61,9 +84,11 @@ class ProcessVideo implements ShouldQueue
             $video->save();
         } catch (EncodingException $exception)
         {
+            Log::error("Error converting ".$filename);
             //Catch any errors and output them to console.
             $command = $exception->getCommand();
             $errorLog = $exception->getErrorOutput();
         }
+        Log::info("Done converting.");
     }
 }

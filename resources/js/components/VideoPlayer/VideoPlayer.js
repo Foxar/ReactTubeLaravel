@@ -4,9 +4,12 @@ import ReactPlayer from 'react-player';
 import { IconButton, LinearProgress } from '@material-ui/core';
 import VideoControlPlayPause from './VideoControlPlayPause'
 import VideoControlMute from './VideoControlMute'
+import VideoControlQuality from './VideoControlQuality'
+import QualityMenu from './VideoControlQualityMenu'
 import VideoControlFullscreen from './VideoControlFullscreen'
 import { withRouter } from "react-router";
 import Fullscreen from "fullscreen-react";
+
 
 
 class VideoPlayer extends React.Component {
@@ -17,15 +20,34 @@ class VideoPlayer extends React.Component {
             played: 0,
             loaded: 0,
             volume: 100,
-            muted: false
+            muted: false,
+            quality: 1
         }
+        this.chooseQuality = this.chooseQuality.bind(this);
     }
+
+    chooseQuality(q) {
+        console.log("quality" + q);
+        this.setState({
+            quality: q
+        })
+    }
+
 
     render() {
 
-        const { url, width } = this.props;
+        var { url, width } = this.props;
         console.log(url);
         console.log(width);
+        if (this.state.quality == 2) {
+            url = this.props.url.replace('.mkv', '_mq.mkv');
+        }
+        else if (this.state.quality == 3) {
+            url = this.props.url.replace('.mkv', '_lq.mkv');
+        }
+        else {
+            url = this.props.url.replace('.mkv', '_hq.mkv');
+        }
 
         return (
 
@@ -50,9 +72,7 @@ class VideoPlayer extends React.Component {
                                 this.setState((state) => ({
                                     playing: !state.playing
                                 }));
-                            }
-                            }
-                            >
+                            }}>
                                 <VideoControlPlayPause isPlaying={this.state.playing} />
                             </IconButton>
                             <IconButton className="mutebutton" color="secondary" onClick={() => {
@@ -69,6 +89,7 @@ class VideoPlayer extends React.Component {
                             }}>
                                 <VideoControlFullscreen isFullscreen={this.state.fullscreen} />
                             </IconButton>
+                            <QualityMenu chooseQuality={this.chooseQuality} />
 
                         </div>
                     </span>

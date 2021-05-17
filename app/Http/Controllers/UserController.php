@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
@@ -133,15 +134,17 @@ class UserController extends Controller
     //Edit user's account
     public function edit(Request $request)
     {
+        Log::info("Edit user");
         //Find user by ID.
         $user = User::find(Auth::id());
         
         //Check if user uploaded a new profile picture. If yes, store it.
         $avatarfile = $request->file('file');
         if($avatarfile != null){
-            $path = public_path().'\react-tube-app\public\avatars\\';
+            $path = public_path().'\\avatars\\';
             $filename = Auth::id().'.png';
             $avatarfile->move($path,$filename);
+            Log::info("Moving file" . $filename . " to path " .$path);
         }
 
         //Check if the name or profile description fields have been edited. If so, submit the changes to database.
